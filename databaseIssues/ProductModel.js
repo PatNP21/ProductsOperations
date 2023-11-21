@@ -8,8 +8,20 @@ const productSchema = mongoose.Schema({
     revision: {
         type: String,
         required: true
+    },
+    class: {
+        type: String
+    },
+    createdOn: {
+        type: Date,
+        default: new Date()
+    },
+    updatedOn: {
+        type: Date,
+        default: new Date()
     }
+
 })
 
-const ProductModel = mongoose.Model('Product', productSchema)
+const ProductModel = mongoose.model('Product', productSchema)
 module.exports = ProductModel
