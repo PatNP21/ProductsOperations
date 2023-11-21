@@ -18,16 +18,18 @@ class Repository {
     }
 
     async updateProduct(id, data) {
-        return ProductModel.findByIdAndUpdate(
+        let updatedProduct = ProductModel.findByIdAndUpdate(
             { _id: id }, 
-            { $set: {name: data.name, revision: data.revision} }   
+            { $set: {name: data.name, revision: data.revision, class: data.class, updatedOn: new Date()} }   
         )
+        return updatedProduct
     }
 
     async deleteProduct(id) {
-        return ProductModel.findByIdAndDelete(
+        let deletedProduct =  ProductModel.findByIdAndDelete(
             { _id: id }
         )
+        return deletedProduct
     }
 }
 
