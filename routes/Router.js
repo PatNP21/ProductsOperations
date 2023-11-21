@@ -1,38 +1,28 @@
-const Controller = require('./Controller.js')
-const express = require('express')
+const Controller = require('./Controller.js') //import klasy Controller z innego pliku
+const express = require('express') 
 
+//deklaracja routera do obsługi tras dla metod HTTP
 const router = express.Router()
+
+//deklaracja instancji klasy Controller
 const controller = new Controller()
 
 router.route("/")
-    .get(
-        //checkIfProductEntityExists
-        //handleValidation
+    .get( //pobieranie danych z bazy 
         controller.getProducts
     )
-    .post(
-        //checkIfProductEntityExists
-        //handleValidation
+    .post( //zapis danych do bazy
         controller.addProduct
     )
 
 router.route("/:id")
-    .get(
-        //checkIfProductEntityExists
-        //checkIfProductExists
-        //handleValidation
+    .get( //pobieranie wybranych danych z bazy
         controller.getProductById
     )
-    .put(
-        //checkIfProductEntityExists
-        //checkIfProductExists
-        //handleValidation
+    .put( //edycja wybranych danych będących w bazie
         controller.updateProduct
     )
-    .delete(
-        //checkIfProductEntityExists
-        //checkIfProductExists
-        //handleValidation
+    .delete( //usunięcie wybranych danych z bazy
         controller.deleteProduct
     )
 
