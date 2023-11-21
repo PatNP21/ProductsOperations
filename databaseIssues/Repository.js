@@ -13,7 +13,8 @@ class Repository {
     }
 
     async createProduct(data) {
-        return ProductModel.insertOne(data)
+        let newProduct = new ProductModel(data)
+        return newProduct.save(data)
     }
 
     async updateProduct(id, data) {

@@ -2,7 +2,14 @@ const Repository = require('./../databaseIssues/Repository.js')
 
 class Controller {
 
-    repository = new Repository()
+    constructor() {
+        this.repository = new Repository()
+        this.getProducts = this.getProducts.bind(this)
+        this.getProductById = this.getProductById.bind(this)
+        this.addProduct = this.addProduct.bind(this)
+        this.updateProduct = this.updateProduct.bind(this)
+        this.deleteProduct = this.deleteProduct.bind(this)
+    }
     
     
     testFunction(req, res) {
