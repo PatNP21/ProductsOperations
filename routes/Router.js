@@ -1,39 +1,42 @@
+const Controller = require('./Controller.js')
 const express = require('express')
-const cors = require('cors')
-const bodyParser = require('body-parser')
 
-app.use(cors())
-app.use(bodyParser.json())
-const app = express()
+const router = express.Router()
+const controller = new Controller()
 
-app.route("/products")
-    .get( (req, res) => {
+router.route("/")
+    .get(
         //checkIfProductEntityExists
         //handleValidation
-        //controller.getAllProducts()
-    })
-    .post( (req, res) => {
+        controller.getProducts
+    )
+    .post(
         //checkIfProductEntityExists
         //handleValidation
-        //controller.addProduct(req.body)
-    })
+        controller.addProduct
+    )
 
-app.route("/products/:id")
-    .get( (req, res) => {
+router.route("/:id")
+    .get(
         //checkIfProductEntityExists
         //checkIfProductExists
         //handleValidation
-        //controller.getProductById(req.params.id)
-    })
-    .put( (req, res) => {
+        controller.getProductById
+    )
+    .put(
         //checkIfProductEntityExists
         //checkIfProductExists
         //handleValidation
-        //controller.updateProductById(req.params.id)
-    } )
-    .delete( (req, res) => {
+        controller.updateProduct
+    )
+    .delete(
         //checkIfProductEntityExists
         //checkIfProductExists
         //handleValidation
-        //controller.deleteProductById(req.params.id)
-    })
+        controller.deleteProduct
+    )
+
+module.exports = router
+
+
+
