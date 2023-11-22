@@ -14,10 +14,10 @@ router.route("/products")
     .post( //zapis danych do bazy
         controller.addProduct
     )
-
-router.route("/products/:id")
-    .get( //pobieranie wybranych danych z bazy
-        controller.getProductById
+    
+router.route("/products/:product")
+    .get(
+        controller.getProductByName
     )
     .put( //edycja wybranych danych będących w bazie
         controller.updateProduct
@@ -26,7 +26,7 @@ router.route("/products/:id")
         controller.deleteProduct
     )
 
-    router.route("/orders")
+router.route("/orders")
     .get( //pobieranie danych z bazy 
         controller.getOrders
     )
