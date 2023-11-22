@@ -12,6 +12,10 @@ const productSchema = mongoose.Schema({
     class: {
         type: String
     },
+    availableAmount: {
+        type: Number,
+        required: true
+    },
     createdOn: {
         type: Date,
         default: new Date()

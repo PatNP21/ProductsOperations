@@ -44,7 +44,7 @@ app.get("/", (req, res) => {
 })
 
 //zaciąganie tras dla obsługi żądań
-app.use("/products", ProductRoutes)
+app.use("/", ProductRoutes)
 
 //inicjalizacja portu pod który podpiety zostaje serwer i zwracanie informacji gdy połączenie z serwerem zostanie nawiązane
 const Port = process.env.PORT || 2000 
