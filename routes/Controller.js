@@ -5,7 +5,7 @@ class Controller {
     constructor() {
         this.repository = new Repository() //wywołanie nowej instancji klasy Repository zawierającej metody do komunikacji z bazą NoSQL
         this.getProducts = this.getProducts.bind(this)
-        this.getProductById = this.getProductById.bind(this)
+        this.getProductByName = this.getProductByName.bind(this)
         this.addProduct = this.addProduct.bind(this)
         this.updateProduct = this.updateProduct.bind(this)
         this.deleteProduct = this.deleteProduct.bind(this)
@@ -29,8 +29,8 @@ class Controller {
     }
 
     //pobieranie pojedynczego elementu
-    getProductById(req, res) {
-        this.repository.getProductById(req.params.id).then(result => {
+    getProductByName(req, res) {
+        this.repository.getProductByName(req.params.product).then(result => {
             res.status(200).json(result)
         }).catch(err => {
             res.status(500).json(err.message)
@@ -46,15 +46,15 @@ class Controller {
     }
 
     updateProduct(req, res) {
-        this.repository.updateProduct(req.params.id, req.body).then(() => {
-            res.status(200).json({"updatedRecord": {"_id": req.params.id}})
+        this.repository.updateProduct(req.params.product, req.body).then(() => {
+            res.status(200).json({"updatedRecord": {"name": req.params.name}})
         }).catch(err => {
             res.status(500).json(err.message)
         })
     }
 
     deleteProduct(req, res) {
-        this.repository.deleteProduct(req.params.id).then(result => {
+        this.repository.deleteProduct(req.params.name).then(result => {
             res.status(200).json(result)
         }).catch(err => {
             res.status(500).json(err.message)

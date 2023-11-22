@@ -11,8 +11,8 @@ class Repository {
         return ProductModel.find()
     }
 
-    async getProductById(id) {
-        return ProductModel.findById(id)
+    async getProductByName(name) {
+        return ProductModel.find({name: name})
     }
 
     async createProduct(data) {
@@ -20,17 +20,17 @@ class Repository {
         return newProduct.save(data)
     }
 
-    async updateProduct(id, data) {
-        let updatedProduct = ProductModel.findByIdAndUpdate(
-            { _id: id }, 
-            { $set: {name: data.name, revision: data.revision, class: data.class, updatedOn: new Date()} }   
+    async updateProduct(name, data) {
+        let updatedProduct = ProductModel.findOneAndUpdate(
+            { name: name }, 
+            { $set: {revision: data.revision, class: data.class, availableAmount: data.availableAmount, updatedOn: new Date()} }   
         )
         return updatedProduct
     }
 
-    async deleteProduct(id) {
-        let deletedProduct =  ProductModel.findByIdAndDelete(
-            { _id: id }
+    async deleteProduct(name) {
+        let deletedProduct =  ProductModel.findOneAndDelete(
+            { name: name }
         )
         return deletedProduct
     }
@@ -47,17 +47,28 @@ class Repository {
 
     async createOrder(data) {
         let newOrder = new OrderModel(data)
-        //let productToUpdate = ProductModel.findByIdAndUpdate({_id: id}, {$set: {availableAmount: "$availableAmount" - data.amount}})
-        return newOrder.save(data)
+        ProductModel.findById(data.product).then( (res) => {
+            if(res._id == data.product) {
+                ProductModel.findOneAndUpdate({_id: data.product}, {$set: {availableAmount: (Number(res.availableAmount) - Number(data.amount))}})
+                .then(updatedProduct => {
+                    if(Number(updatedProduct.availableAmount) >= 0) {
+                        return newOrder.save(data)
+                    }
+                }).catch(() => {
+                    throw new Error('Available amount of the product is not enough to man this order.')
+                }) 
+            } else {
+                throw new Error('The mentioned product does not exist.')
+            }
+            
+        })       
     }
 
-    async updateOrder(id, data) {
+    /*async updateOrder(id, data) {
         let updatedOrder = OrderModel.findByIdAndUpdate(
             { _id: id }
-            /*{ $set: {name: data.name, revision: data.revision, class: data.class, updatedOn: new Date()} }*/   
-        )
-        return updatedOrder
-    }
+            
+    }*/
 
     async deleteOrder(id) {
         let deletedOrder =  OrderModel.findByIdAndDelete(
