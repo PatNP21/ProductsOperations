@@ -18,5 +18,5 @@ When("I add a new product to the database", async () => {
 })
 
 Then("I can find the added product in the database", (res) => {
-    assert.equal(response, {"createdProduct": data})
+    assert.equal(response, {"addedProduct": data})
 })

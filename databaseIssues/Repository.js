@@ -5,6 +5,8 @@ class Repository {
 
     constructor() {}
 
+    changeStream
+
     //PRODUCTS
 
     async getAllProducts() {
@@ -17,6 +19,8 @@ class Repository {
 
     async createProduct(data) {
         let newProduct = new ProductModel(data)
+        this.changeStream.watch()
+        let next = this.changeStream.next()
         return newProduct.save(data)
     }
 
@@ -53,9 +57,11 @@ class Repository {
                 .then(updatedProduct => {
                     if(Number(updatedProduct.availableAmount) >= 0) {
                         return newOrder.save(data)
+                    } else {
+                        throw new Error('Available amount of the product is not enough to man this order.')
                     }
                 }).catch(() => {
-                    throw new Error('Available amount of the product is not enough to man this order.')
+                    throw new Error('Problem occured.')
                 }) 
             } else {
                 throw new Error('The mentioned product does not exist.')
