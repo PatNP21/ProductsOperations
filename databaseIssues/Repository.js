@@ -36,7 +36,7 @@ class Repository {
         let deletedProduct =  ProductModel.findOneAndDelete(
             { name: name }
         )
-        return deletedProduct
+        return {"message": `The product ${name} has been deleted.`}
     }
 
     //ORDERS

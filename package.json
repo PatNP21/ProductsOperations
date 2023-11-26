@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "node BDDtests.js"
+    "test": "node ./node_modules/.bin/cucumber-js ./tests/getAllFeature.feature^"
   },
   "author": "Patryk Najda",
   "license": "ISC",
@@ -14,12 +14,14 @@
     "axios": "^1.6.2",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
-    "cucumber": "^6.0.7",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "express-validator": "^7.0.1",
     "html": "^1.0.0",
     "mongoose": "^8.0.1",
     "nodemon": "^3.0.1"
+  },
+  "devDependencies": {
+    "cucumber": "^6.0.7"
   }
 }
