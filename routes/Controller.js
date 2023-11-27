@@ -28,7 +28,6 @@ class Controller {
         })
     }
 
-    //pobieranie pojedynczego elementu
     getProductByName(req, res) {
         this.repository.getProductByName(req.params.product).then(result => {
             res.status(200).json(result)

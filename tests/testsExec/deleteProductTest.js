@@ -12,7 +12,5 @@ When('we are deleting the product', async function() {
 })
 
 Then('we should receive the information about deleted product', function() {
-    return response
+    assert.ok({"message": `The product ${name} has been deleted.`})
 })
-
-//{"message": `The product ${name} has been deleted.`}

@@ -12,5 +12,5 @@ When('we are get the proper product with more details', async function() {
 })
 
 Then('we receive the details for chosen product', function() {
-    return response
+    assert.equal(response.data.name, name)
 })

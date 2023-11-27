@@ -18,4 +18,3 @@ Feature: Methods maning the operations with product
         Given name of the product we have just decided to remove
         When we are deleting the product
         Then we should receive the information about deleted product
-
