@@ -19,8 +19,6 @@ class Repository {
 
     async createProduct(data) {
         let newProduct = new ProductModel(data)
-        this.changeStream.watch()
-        let next = this.changeStream.next()
         return newProduct.save(data)
     }
 
@@ -56,7 +54,12 @@ class Repository {
                 ProductModel.findOneAndUpdate({_id: data.product}, {$set: {availableAmount: (Number(res.availableAmount) - Number(data.amount))}})
                 .then(updatedProduct => {
                     if(Number(updatedProduct.availableAmount) >= 0) {
-                        return newOrder.save(data)
+                        try {
+                            newOrder.save(data)
+                            return {"addedRecord": data}
+                        } catch(err) {
+                            return {"message": "Error occured during creating the order."}
+                        }
                     } else {
                         throw new Error('Available amount of the product is not enough to man this order.')
                     }

@@ -14,7 +14,17 @@ const productSchema = mongoose.Schema({
     },
     availableAmount: {
         type: Number,
-        required: true
+        required: true,
+        minValue: 0
+    },
+    price: {
+        type: Number,
+        minValue: 0,
+        required: true,
+    },
+    isAvailable: {
+        type: Boolean,
+        default: true
     },
     createdOn: {
         type: Date,

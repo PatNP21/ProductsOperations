@@ -2,15 +2,22 @@ const {Given, When, Then} = require('cucumber')
 const assert = require('assert')
 const axios = require('axios')
 
-let data, response
+let data
+let response
 Given('all required data to create new product', function() {
+    data = {
+        name: 'test',
+        revision: 'revision',
+        availableAmount: 1000
+    } 
     return data
 })
 
 When('we are creating a new product', async function() {
-    response = await axios.get('http://localhost:2000/products')
+    response = await axios.post('http://localhost:2000/products', data)
+    return response
 })
 
 Then('the response returned to us is proper', function() {
-    return response
+    assert.ok([{"addedRecord": response.data[0]}])
 })
