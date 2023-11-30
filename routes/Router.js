@@ -1,17 +1,15 @@
-const Controller = require('./Controller.js') //import klasy Controller z innego pliku
+const Controller = require('./Controller.js') 
 const express = require('express') 
 
-//deklaracja routera do obsługi tras dla metod HTTP
 const router = express.Router()
 
-//deklaracja instancji klasy Controller
 const controller = new Controller()
 
 router.route("/products")
-    .get( //pobieranie danych z bazy 
+    .get(
         controller.getProducts
     )
-    .post( //zapis danych do bazy
+    .post( 
         controller.addProduct
     )
     
@@ -19,29 +17,29 @@ router.route("/products/:product")
     .get(
         controller.getProductByName
     )
-    .put( //edycja wybranych danych będących w bazie
+    .put(
         controller.updateProduct
     )
-    .delete( //usunięcie wybranych danych z bazy
+    .delete(
         controller.deleteProduct
     )
 
 router.route("/orders")
-    .get( //pobieranie danych z bazy 
+    .get( 
         controller.getOrders
     )
-    .post( //zapis danych do bazy
+    .post(
         controller.addOrder
     )
 
 router.route("/orders/:id")
-    .get( //pobieranie wybranych danych z bazy
+    .get(
         controller.getOrderById
     )
-    .put( //edycja wybranych danych będących w bazie
+    .put(
         controller.updateOrder
     )
-    .delete( //usunięcie wybranych danych z bazy
+    .delete(
         controller.deleteOrder
     )
 
