@@ -37,23 +37,23 @@ class Controller {
     }
 
     addProduct(req, res) {
-        this.repository.createProduct(req.body).then(() => {
-            res.status(201).json({"addedRecord": req.body})
+        this.repository.createProduct(req.body).then((result) => {
+            res.status(201).json(result)
         }).catch(err => {
             res.status(500).json(err.message)
         })
     }
 
     updateProduct(req, res) {
-        this.repository.updateProduct(req.params.product, req.body).then(() => {
-            res.status(200).json({"updatedRecord": {"name": req.params.name}})
+        this.repository.updateProduct(req.params.product, req.body).then((result) => {
+            res.status(200).json({"result": result})
         }).catch(err => {
             res.status(500).json(err.message)
         })
     }
 
     deleteProduct(req, res) {
-        this.repository.deleteProduct(req.params.name).then(result => {
+        this.repository.deleteProduct(req.params.product).then((result) => {
             res.status(200).json(result)
         }).catch(err => {
             res.status(500).json(err.message)
@@ -78,16 +78,16 @@ class Controller {
     }
 
     addOrder(req, res) {
-        this.repository.createOrder(req.body).then(() => {
-            res.status(201).json({"addedRecord": req.body})
+        this.repository.createOrder(req.body).then((result) => {
+            res.status(201).json({"result": result})
         }).catch(err => {
             res.status(500).json(err.message)
         })
     }
 
     updateOrder(req, res) {
-        this.repository.updateOrder(req.params.id, req.body).then(() => {
-            res.status(200).json({"updatedRecord": {"_id": req.params.id}})
+        this.repository.updateOrder(req.params.id, req.body).then((result) => {
+            res.status(200).json({"result": {"_id": req.params.id}})
         }).catch(err => {
             res.status(500).json(err.message)
         })

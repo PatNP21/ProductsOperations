@@ -1,40 +1,75 @@
 const ProductModel = require("./ProductModel")
 const OrderModel = require("./OrderModel")
+const mongoose = require('mongoose') 
+
 
 class Repository {
 
     constructor() {}
 
-    changeStream
+    db = mongoose.connection
+    products = this.db.collection('products')
+    orders = this.db.collection('orders')
 
     //PRODUCTS
 
+    //WORKS!!
     async getAllProducts() {
-        return ProductModel.find()
+        return this.products.find({}).toArray()
     }
 
+    //WORKS!!
     async getProductByName(name) {
-        return ProductModel.find({name: name})
+        return this.products.findOne({name: name})
     }
 
+    //WORKS!!
     async createProduct(data) {
         let newProduct = new ProductModel(data)
-        return newProduct.save(data)
+        try {
+            return this.products.insertOne({
+                name: data.name,
+                createdAt: new Date(),
+                current: {v: 1, ...newProduct._doc},
+                prev: []
+            })
+        }
+        catch(err) {
+            return "Error occured!"
+        }
+
     }
 
     async updateProduct(name, data) {
-        let updatedProduct = ProductModel.findOneAndUpdate(
-            { name: name }, 
-            { $set: {revision: data.revision, class: data.class, availableAmount: data.availableAmount, updatedOn: new Date()} }   
-        )
-        return updatedProduct
+        let updatedProduct = new ProductModel(data) 
+        this.getProductByName(name).then(res => {
+            console.log(res)
+            this.products.findOneAndUpdate(
+                {name: name}, 
+                {$push: {prev: res.current}} 
+            )
+            this.products.updateOne(
+                {name: name}, 
+                {$set: {current: {v: res.current.v += 1, ...updatedProduct._doc}}}
+                
+            )
+            return "Record updated"
+        }).catch(err => {
+            return "Error occured."
+        })
+        
     }
 
+    //WORKS
     async deleteProduct(name) {
-        let deletedProduct =  ProductModel.findOneAndDelete(
-            { name: name }
-        )
-        return {"message": `The product ${name} has been deleted.`}
+        try {
+            this.products.findOneAndDelete(
+                { name: name }
+            )
+            return {"message": `The product ${name} has been deleted.`}
+        } catch(err) {
+            return "It is impossible to remove the product"
+        }
     }
 
     //ORDERS
@@ -71,19 +106,6 @@ class Repository {
             }
             
         })       
-    }
-
-    /*async updateOrder(id, data) {
-        let updatedOrder = OrderModel.findByIdAndUpdate(
-            { _id: id }
-            
-    }*/
-
-    async deleteOrder(id) {
-        let deletedOrder =  OrderModel.findByIdAndDelete(
-            { _id: id }
-        )
-        return deletedOrder
     }
 }
 
