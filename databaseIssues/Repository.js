@@ -75,31 +75,39 @@ class Repository {
     //ORDERS
 
     async getAllOrders() {
-        return OrderModel.find()
+        return this.orders.find({}).toArray()
     }
 
     async getOrderById(id) {
-        return OrderModel.findById(id)
+        return this.orders.findById(id)
     }
 
     async createOrder(data) {
         let newOrder = new OrderModel(data)
-        ProductModel.findById(data.product).then( (res) => {
-            if(res._id == data.product) {
-                ProductModel.findOneAndUpdate({_id: data.product}, {$set: {availableAmount: (Number(res.availableAmount) - Number(data.amount))}})
+        this.products.findOne({name: data.product}).then( (res) => {
+            console.log('point control 1')
+            if(res.name == data.product) {
+                console.log('point control 2')
+                this.products.findOneAndUpdate({name: data.product}, {$set: {current: {availableAmount: (Number(res.current.availableAmount) - Number(data.amount))}}})
                 .then(updatedProduct => {
-                    if(Number(updatedProduct.availableAmount) >= 0) {
+                    console.log('point control 3')
+                    console.log(updatedProduct.current)
+                    if(Number(updatedProduct.current.availableAmount) >= 0) {
                         try {
-                            newOrder.save(data)
-                            return {"addedRecord": data}
+                            console.log('point control 4')
+                            console.log(newOrder)
+                            return this.order.insertOne(newOrder)
                         } catch(err) {
+                            console.log('point control 5')
                             return {"message": "Error occured during creating the order."}
                         }
                     } else {
-                        throw new Error('Available amount of the product is not enough to man this order.')
+                        console.log('point control 6')
+                        return 'Available amount of the product is not enough to man this order.'
                     }
-                }).catch(() => {
-                    throw new Error('Problem occured.')
+                }).catch((err) => {
+                    console.log(err)
+                    return 'Problem occured.'
                 }) 
             } else {
                 throw new Error('The mentioned product does not exist.')

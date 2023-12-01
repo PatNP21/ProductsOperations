@@ -12,8 +12,8 @@ class Controller {
         this.getOrders = this.getOrders.bind(this)
         this.getOrderById = this.getOrderById.bind(this)
         this.addOrder = this.addOrder.bind(this)
-        this.updateOrder = this.updateOrder.bind(this)
-        this.deleteOrder = this.deleteOrder.bind(this)
+        //this.updateOrder = this.updateOrder.bind(this)
+        //this.deleteOrder = this.deleteOrder.bind(this)
         //dziesięc powyższych wierszy ... 
     }
     
@@ -85,7 +85,7 @@ class Controller {
         })
     }
 
-    updateOrder(req, res) {
+    /*updateOrder(req, res) {
         this.repository.updateOrder(req.params.id, req.body).then((result) => {
             res.status(200).json({"result": {"_id": req.params.id}})
         }).catch(err => {
@@ -99,7 +99,7 @@ class Controller {
         }).catch(err => {
             res.status(500).json(err.message)
         })
-    }
+    }*/
 }
 
 module.exports = Controller
