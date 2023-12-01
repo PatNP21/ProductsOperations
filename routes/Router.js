@@ -36,12 +36,6 @@ router.route("/orders/:id")
     .get(
         controller.getOrderById
     )
-    .put(
-        controller.updateOrder
-    )
-    .delete(
-        controller.deleteOrder
-    )
 
 module.exports = router
 
