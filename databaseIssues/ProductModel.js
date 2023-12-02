@@ -25,6 +25,9 @@ const productSchema = mongoose.Schema({
     updatedOn: {
         type: Date,
         default: new Date()
+    },
+    v: {
+        type: Number
     }
 })
 

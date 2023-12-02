@@ -26,11 +26,12 @@ class Repository {
     //WORKS!!
     async createProduct(data) {
         let newProduct = new ProductModel(data)
+        newProduct.v = 1
         try {
             return this.products.insertOne({
                 name: data.name,
                 createdAt: new Date(),
-                current: {v: 1, ...newProduct._doc},
+                current: {...newProduct._doc},
                 prev: []
             })
         }
@@ -41,19 +42,19 @@ class Repository {
     }
 
     async updateProduct(name, data) {
-        let updatedProduct = new ProductModel(data) 
+        let updatedProduct = new ProductModel(data)
+        updatedProduct.v = Number(updatedProduct.v) + 1 
         this.getProductByName(name).then(res => {
             console.log(res)
             this.products.findOneAndUpdate(
                 {name: name}, 
                 {$push: {prev: res.current}} 
             )
-            this.products.updateOne(
+            return this.products.updateOne(
                 {name: name}, 
-                {$set: {current: {v: res.current.v += 1, ...updatedProduct._doc}}}
+                {$set: {current: {...updatedProduct._doc}}}
                 
             )
-            return "Record updated"
         }).catch(err => {
             return "Error occured."
         })
@@ -86,9 +87,13 @@ class Repository {
         let newOrder = new OrderModel(data)
         this.products.findOne({name: data.product}).then( (res) => {
             console.log('point control 1')
+            let current = Object(res.current)
+            console.log(current)            
+            current.availableAmount = Number(res.current.availableAmount) - Number(data.amount)
+            current.v = Number(res.current.v) + 1
             if(res.name == data.product) {
                 console.log('point control 2')
-                this.products.findOneAndUpdate({name: data.product}, {$set: {current: {availableAmount: (Number(res.current.availableAmount) - Number(data.amount))}}})
+                this.products.findOneAndUpdate({name: data.product}, {$set: {current: current}})
                 .then(updatedProduct => {
                     console.log('point control 3')
                     console.log(updatedProduct.current)
