@@ -3,27 +3,18 @@ const Repository = require('./../databaseIssues/Repository.js')
 class Controller {
 
     constructor() {
-        this.repository = new Repository() //wywołanie nowej instancji klasy Repository zawierającej metody do komunikacji z bazą NoSQL
+        this.repository = new Repository() 
         this.getProducts = this.getProducts.bind(this)
         this.getProductByName = this.getProductByName.bind(this)
         this.addProduct = this.addProduct.bind(this)
         this.updateProduct = this.updateProduct.bind(this)
         this.deleteProduct = this.deleteProduct.bind(this)
-        this.getOrders = this.getOrders.bind(this)
-        this.getOrderById = this.getOrderById.bind(this)
-        this.addOrder = this.addOrder.bind(this)
-        //this.updateOrder = this.updateOrder.bind(this)
-        //this.deleteOrder = this.deleteOrder.bind(this)
-        //dziesięc powyższych wierszy ... 
     }
     
-    //pobieranie wszystkich produktów, czyli zwracanie rezultatów w zależności od powodzenia uzyskania wyników lub ich braku
     getProducts(req, res) {
-        //metody komunikacji z baza MongoDB są asymetryczne, dlatego aby zwracać wynik w zależności od ich wykonania, należy użyć metod ".then()" oraz ".catch()", inaczej ta postać metody zapisana jako synchroniczna zwróci wynik np. "Promise{}"
-        this.repository.getAllProducts().then(result => { //użycie metody "".then" pozwala wywołać podany kod w przypadku pomyślnego pobrania wyników
+        this.repository.getAllProducts().then(result => { 
             res.status(200).json(result)
         }).catch(err => {
-            //obsługa wyjątku (tu błędnego wywołania metody)
             res.status(500).json(err.message)
         })
     }
@@ -59,47 +50,6 @@ class Controller {
             res.status(500).json(err.message)
         })
     }
-
-    getOrders(req, res) {
-        this.repository.getAllOrders().then(result => {
-            res.status(200).json(result)
-        }).catch(err => {
-            //obsługa wyjątku (tu błędnego wywołania metody)
-            res.status(500).json(err.message)
-        })
-    }
-
-    getOrderById(req, res) {
-        this.repository.getOrderById(req.params.id).then(result => {
-            res.status(200).json(result)
-        }).catch(err => {
-            res.status(500).json(err.message)
-        })
-    }
-
-    addOrder(req, res) {
-        this.repository.createOrder(req.body).then((result) => {
-            res.status(201).json({"result": result})
-        }).catch(err => {
-            res.status(500).json(err.message)
-        })
-    }
-
-    /*updateOrder(req, res) {
-        this.repository.updateOrder(req.params.id, req.body).then((result) => {
-            res.status(200).json({"result": {"_id": req.params.id}})
-        }).catch(err => {
-            res.status(500).json(err.message)
-        })
-    }
-
-    deleteOrder(req, res) {
-        this.repository.deleteOrder(req.params.id).then(result => {
-            res.status(200).json(result)
-        }).catch(err => {
-            res.status(500).json(err.message)
-        })
-    }*/
 }
 
 module.exports = Controller

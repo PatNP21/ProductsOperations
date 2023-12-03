@@ -8,7 +8,7 @@ Given('we need to get details for proper name of the product', function() {
 })
 
 When('we are get the proper product with more details', async function() {
-    response = await axios.get(`http://localhost:2000/products/${name}`)
+    response = await axios.get(`http://localhost:2001/products/${name}`)
 })
 
 Then('we receive the details for chosen product', function() {

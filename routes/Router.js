@@ -1,4 +1,5 @@
 const Controller = require('./Controller.js') 
+const validator = require('../validator/validator.js')
 const express = require('express') 
 
 const router = express.Router()
@@ -10,6 +11,7 @@ router.route("/products")
         controller.getProducts
     )
     .post( 
+        validator.create,
         controller.addProduct
     )
     
@@ -18,23 +20,12 @@ router.route("/products/:product")
         controller.getProductByName
     )
     .put(
+        validator.update,
         controller.updateProduct
     )
     .delete(
+        validator.remove,
         controller.deleteProduct
-    )
-
-router.route("/orders")
-    .get( 
-        controller.getOrders
-    )
-    .post(
-        controller.addOrder
-    )
-
-router.route("/orders/:id")
-    .get(
-        controller.getOrderById
     )
 
 module.exports = router

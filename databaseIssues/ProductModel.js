@@ -11,11 +11,11 @@ const productSchema = mongoose.Schema({
     availableAmount: {
         type: Number,
         required: true,
-        minValue: 0
+        minimum: [0, 'The amount cannot be lower than 0.']
     },
     price: {
         type: Number,
-        minValue: 0,
+        minimum: [0, 'The price cannot be lower than 0.'],
         required: true
     },
     isAvailable: {
