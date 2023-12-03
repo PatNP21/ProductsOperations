@@ -26,7 +26,7 @@ app.get("/", (req, res) => {
 
 app.use("/", ProductRoutes)
 
-const Port = process.env.PORT || 2000 
+const Port = process.env.PORT || 2001
 app.listen(Port, () => {
     console.log(`Server ${Port}`)
 })

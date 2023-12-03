@@ -4,7 +4,7 @@ const axios = require('axios')
 
 let data
 let response
-Given('all required data to create new product', function() {
+Given('all required data to create new product with amount less than zero', function() {
     data = {
         name: 'test',
         revision: 'revision',
@@ -13,11 +13,11 @@ Given('all required data to create new product', function() {
     return data
 })
 
-When('we are creating a new product', async function() {
+When('we are creating a new product with amount less than zero', async function() {
     response = await axios.post('http://localhost:2001/products', data)
     return response
 })
 
-Then('the response returned to us is proper', function() {
-    assert.ok(response)
+Then('which response would we expect', function() {
+    assert.ok('The amount cannot be lower than 0.')
 })

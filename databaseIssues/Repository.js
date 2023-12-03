@@ -1,5 +1,4 @@
 const ProductModel = require("./ProductModel")
-const OrderModel = require("./OrderModel")
 const mongoose = require('mongoose') 
 
 
@@ -9,31 +8,44 @@ class Repository {
 
     db = mongoose.connection
     products = this.db.collection('products')
-    orders = this.db.collection('orders')
 
-    //PRODUCTS
+    result
 
     //WORKS!!
     async getAllProducts() {
-        return this.products.find({}).toArray()
+        this.result = await this.products.find({}).toArray()
+        if(this.result == []) {
+            return 'The collection is empty.'
+        } else {
+            return this.result
+        }
     }
 
     //WORKS!!
     async getProductByName(name) {
-        return this.products.findOne({name: name})
+        this.result = await this.products.findOne({name: name})
+        if(this.result === null) {
+            return 'The product does not exist.'
+        } else {
+            return this.result
+        }
     }
 
     //WORKS!!
     async createProduct(data) {
         let newProduct = new ProductModel(data)
-        newProduct.v = 1
         try {
-            return this.products.insertOne({
+            this.result = await this.products.insertOne({
                 name: data.name,
                 createdAt: new Date(),
                 current: {...newProduct._doc},
                 prev: []
             })
+            if(this.result) {
+                return this.result.insertedId
+            } else {
+                return 'Error occured!'
+            }
         }
         catch(err) {
             return "Error occured!"
@@ -43,82 +55,44 @@ class Repository {
 
     async updateProduct(name, data) {
         let updatedProduct = new ProductModel(data)
-        updatedProduct.v = Number(updatedProduct.v) + 1 
-        this.getProductByName(name).then(res => {
+        if(updatedProduct.availableAmount === 0) {
+            updatedProduct.isAvailable = false
+        }
+        this.getProductByName(name).then(async (res) => {
             console.log(res)
             this.products.findOneAndUpdate(
                 {name: name}, 
                 {$push: {prev: res.current}} 
             )
-            return this.products.updateOne(
+
+            this.result = await this.products.updateOne(
                 {name: name}, 
                 {$set: {current: {...updatedProduct._doc}}}
-                
             )
+            if(this.result && this.result.modifiedCount === 1) {
+                return "Product updated"
+            } else {
+                return 'Error occured!'
+            }
         }).catch(err => {
             return "Error occured."
         })
         
     }
 
-    //WORKS
     async deleteProduct(name) {
         try {
-            this.products.findOneAndDelete(
+            this.result = await this.products.findOneAndDelete(
                 { name: name }
             )
-            return {"message": `The product ${name} has been deleted.`}
+            if(this.result === null) {
+                return "The product had not existed."
+            } else {
+                return this.result
+            }
         } catch(err) {
             return "It is impossible to remove the product"
         }
-    }
-
-    //ORDERS
-
-    async getAllOrders() {
-        return this.orders.find({}).toArray()
-    }
-
-    async getOrderById(id) {
-        return this.orders.findById(id)
-    }
-
-    async createOrder(data) {
-        let newOrder = new OrderModel(data)
-        this.products.findOne({name: data.product}).then( (res) => {
-            console.log('point control 1')
-            let current = Object(res.current)
-            console.log(current)            
-            current.availableAmount = Number(res.current.availableAmount) - Number(data.amount)
-            current.v = Number(res.current.v) + 1
-            if(res.name == data.product) {
-                console.log('point control 2')
-                this.products.findOneAndUpdate({name: data.product}, {$set: {current: current}})
-                .then(updatedProduct => {
-                    console.log('point control 3')
-                    console.log(updatedProduct.current)
-                    if(Number(updatedProduct.current.availableAmount) >= 0) {
-                        try {
-                            console.log('point control 4')
-                            console.log(newOrder)
-                            return this.order.insertOne(newOrder)
-                        } catch(err) {
-                            console.log('point control 5')
-                            return {"message": "Error occured during creating the order."}
-                        }
-                    } else {
-                        console.log('point control 6')
-                        return 'Available amount of the product is not enough to man this order.'
-                    }
-                }).catch((err) => {
-                    console.log(err)
-                    return 'Problem occured.'
-                }) 
-            } else {
-                throw new Error('The mentioned product does not exist.')
-            }
-            
-        })       
     }
 }
 
