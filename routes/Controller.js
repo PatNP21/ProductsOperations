@@ -10,6 +10,10 @@ class Controller {
         this.updateProduct = this.updateProduct.bind(this)
         this.deleteProduct = this.deleteProduct.bind(this)
     }
+
+    dashboard(req, res) {
+        res.json({'status': 'It simply works!'})
+    }
     
     getProducts(req, res) {
         this.repository.getAllProducts().then(result => { 

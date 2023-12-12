@@ -4,6 +4,11 @@ const express = require('express')
 const router = express.Router()
 const controller = new Controller()
 
+router.route('/')
+    .get(
+        controller.dashboard
+    )
+
 router.route("/products")
     .get(
         controller.getProducts
