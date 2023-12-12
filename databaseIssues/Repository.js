@@ -11,7 +11,6 @@ class Repository {
 
     result
 
-    //WORKS!!
     async getAllProducts() {
         this.result = await this.products.find({}).toArray()
         if(this.result == []) {
@@ -21,7 +20,6 @@ class Repository {
         }
     }
 
-    //WORKS!!
     async getProductByName(name) {
         this.result = await this.products.findOne({name: name})
         if(this.result === null) {
@@ -31,7 +29,6 @@ class Repository {
         }
     }
 
-    //WORKS!!
     async createProduct(data) {
         let newProduct = new ProductModel(data)
         try {
