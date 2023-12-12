@@ -20,10 +20,6 @@ DbInstance.once('open', () => {
     console.log("Connected with database.")
 })
 
-app.get("/", (req, res) => {
-    res.render(`./index.html`)
-})
-
 app.use("/", ProductRoutes)
 
 const Port = process.env.PORT || 2001
